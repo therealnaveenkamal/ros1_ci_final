@@ -1,0 +1,30 @@
+version: '2'
+
+networks:
+  ros:
+    driver: bridge
+
+services:
+  ros-master:
+    image: osrf/ros:noetic-desktop-full
+    command: stdbuf -o L roscore
+    networks:
+      - ros
+    restart: always
+    ports:
+      - "11311:11311"
+
+  waypointstest:
+    image: tortoisebot-cp24:ros1
+    container_name: tortoisebot-ros1-ci_1
+    command: stdbuf -o L rostest tortoisebot_waypoints waypoints_test.test
+    depends_on:
+      - ros-master
+    environment:
+      - "ROS_MASTER_URI=http://ros-master:11311"
+      - DISPLAY=:2
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    networks:
+      - ros
+    restart: always

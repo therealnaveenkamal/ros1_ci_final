@@ -24,11 +24,12 @@ pipeline {
                 }
             }
         }
-        stage('Run Docker Compose') {
+        stage('Docker Bash') {
             steps {
                 script {
                     dir('/home/user/catkin_ws/src/ros1_ci') {
-                        sh 'sudo docker-compose up'
+                        sh 'sudo docker run -e DISPLAY=:2 -v /tmp/.X11-unix:/tmp/.X11-unix tortoisebot-cp24:ros1 bash'
+                        sh 'rostest tortoisebot_waypoints waypoints_test.test'
                     }
                 }
             }

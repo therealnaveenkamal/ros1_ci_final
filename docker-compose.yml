@@ -1,13 +1,9 @@
 version: '2'
 
-
 services:
   waypointstest:
     image: tortoisebot-cp24:ros1
-    container_name: tortoisebot-ros1-ci_1
-    command: rostest tortoisebot_waypoints waypoints_test.test
     environment:
       - DISPLAY=:2
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
-    restart: always

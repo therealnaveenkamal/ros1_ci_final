@@ -1,13 +1,5 @@
 pipeline {
     agent any
-    
-    environment {
-        DOCKER_IMAGE = 'tortoisebot-cp24:ros1'
-        DISPLAY_VAR = ':2'
-        TEST_COMMAND = 'rostest tortoisebot_waypoints waypoints_test.test'
-        X11_UNIX_MOUNT = '/tmp/.X11-unix'
-    }
-
     stages {
         stage('Install Docker') {
             steps {
@@ -17,8 +9,9 @@ pipeline {
                     sh 'sudo service docker start'
                     sh 'sudo usermod -aG docker $USER'
                     sh 'newgrp docker'
-                    sh 'sudo service jenkins restart'
-                    sh 'docker ps -a'
+                    sh 'sudo service docker status'
+                    sh 'sudo docker ps -a'
+                    sh 'sudo service docker restart'
                 }
             }
         }
@@ -31,15 +24,12 @@ pipeline {
                 }
             }
         }
-        stage('Docker Run') {
+        stage('Run Docker Compose') {
             steps {
                 script {
-                    docker.image(DOCKER_IMAGE).pull()
-                    def container = docker.container(DOCKER_IMAGE)
-                        .withRun('--env DISPLAY=$DISPLAY_VAR --volume $X11_UNIX_MOUNT:$X11_UNIX_MOUNT')
-                        .inside {
-                            sh "bash -c 'export DISPLAY=$DISPLAY_VAR && $TEST_COMMAND'"
-                        }
+                    dir('/home/user/catkin_ws/src/ros1_ci') {
+                        sh 'sudo docker-compose up'
+                    }
                 }
             }
         }

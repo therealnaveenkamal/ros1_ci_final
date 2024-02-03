@@ -20,4 +20,4 @@ RUN /bin/bash -c "source /opt/ros/noetic/setup.bash; cd /simulation_ws; catkin_m
 RUN echo source /simulation_ws/devel/setup.bash >> ~/.bashrc
 
 # Set the entry point to start a bash shell
-CMD /bin/bash -c "source /simulation_ws/devel/setup.bash; roslaunch tortoisebot_waypoints waypoints_test.launch"
+CMD /bin/bash -c "source /simulation_ws/devel/setup.bash; rostest tortoisebot_waypoints waypoints_test.test"

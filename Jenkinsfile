@@ -28,8 +28,7 @@ pipeline {
             steps {
                 script {
                     dir('/home/user/catkin_ws/src/ros1_ci') {
-                        sh 'sudo docker run -e DISPLAY=:2 -v /tmp/.X11-unix:/tmp/.X11-unix tortoisebot-cp24:ros1 bash'
-                        sh 'rostest tortoisebot_waypoints waypoints_test.test'
+                        sh 'sudo docker run -e DISPLAY=:2 -v /tmp/.X11-unix:/tmp/.X11-unix tortoisebot-cp24:ros1 "rostest tortoisebot_waypoints waypoints_test.test"'
                     }
                 }
             }

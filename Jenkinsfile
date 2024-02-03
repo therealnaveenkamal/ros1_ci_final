@@ -35,6 +35,8 @@ pipeline {
             steps {
                 script {
                     sh 'export DISPLAY=:2'
+                    sh 'ls -al'
+                    sh 'source ~/simulation_ws/devel/setup.bash'
                     sh 'rostest tortoisebot_waypoints waypoints_test.test'
                 }
             }

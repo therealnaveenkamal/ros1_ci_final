@@ -18,8 +18,7 @@ pipeline {
                     sh 'sudo usermod -aG docker $USER'
                     sh 'newgrp docker'
                     sh 'sudo service docker status'
-                    sh 'sudo docker ps -a'
-                    sh 'sudo service docker restart'
+                    sh 'docker ps -a'
                 }
             }
         }

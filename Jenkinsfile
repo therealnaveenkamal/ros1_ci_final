@@ -27,7 +27,7 @@ pipeline {
         }
         stage('Into Image'){
             agent {
-                docker {
+                any {
                     image 'tortoisebot-cp24:ros1'
                     args '-v /tmp/.X11-unix:/tmp/.X11-unix'
                 }

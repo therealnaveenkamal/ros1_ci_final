@@ -1,5 +1,13 @@
 pipeline {
     agent any
+    
+    environment {
+        DOCKER_IMAGE = 'tortoisebot-cp24:ros1'
+        DISPLAY_VAR = ':2'
+        TEST_COMMAND = 'rostest tortoisebot_waypoints waypoints_test.test'
+        X11_UNIX_MOUNT = '/tmp/.X11-unix'
+    }
+
     stages {
         stage('Install Docker') {
             steps {
@@ -24,13 +32,15 @@ pipeline {
                 }
             }
         }
-        stage('Docker Bash') {
+        stage('Docker Run') {
             steps {
                 script {
-                    dir('/home/user/catkin_ws/src/ros1_ci') {
-                        sh 'sudo docker run -it -e DISPLAY=:2 -v /tmp/.X11-unix:/tmp/.X11-unix tortoisebot-cp24:ros1 bash'
-                        sh 'rostest tortoisebot_waypoints waypoints_test.test'
-                    }
+                    docker.image(DOCKER_IMAGE).pull()
+                    def container = docker.container(DOCKER_IMAGE)
+                        .withRun('--env DISPLAY=$DISPLAY_VAR --volume $X11_UNIX_MOUNT:$X11_UNIX_MOUNT')
+                        .inside {
+                            sh "bash -c 'export DISPLAY=$DISPLAY_VAR && $TEST_COMMAND'"
+                        }
                 }
             }
         }

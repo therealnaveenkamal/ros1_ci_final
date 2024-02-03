@@ -25,16 +25,13 @@ pipeline {
                 }
             }
         }
-    }
-
-    agent {
-        docker {
-            image 'tortoisebot-cp24:ros1'
-            args '-v /tmp/.X11-unix:/tmp/.X11-unix'
-        }
-    }
-    stages {
-        stage('Inside Docker') {
+        stage('Into Image'){
+            agent {
+                docker {
+                    image 'tortoisebot-cp24:ros1'
+                    args '-v /tmp/.X11-unix:/tmp/.X11-unix'
+                }
+            }
             steps {
                 script {
                     sh 'export DISPLAY=:2'
@@ -43,4 +40,6 @@ pipeline {
             }
         }
     }
+
+
 }

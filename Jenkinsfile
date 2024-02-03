@@ -17,7 +17,7 @@ pipeline {
                     sh 'sudo service docker start'
                     sh 'sudo usermod -aG docker $USER'
                     sh 'newgrp docker'
-                    sh 'sudo service docker status'
+                    sh 'sudo service jenkins restart'
                     sh 'docker ps -a'
                 }
             }
